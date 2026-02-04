@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Valentine for Baby Harrieth Nicole 💖</title>
+<title>Valentine Bading Version 💖🌈</title>
 <style>
-  body {
+body {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -15,21 +15,21 @@
     font-family: 'Arial', sans-serif;
     overflow: hidden;
     position: relative;
-  }
-  #container {
+}
+#container {
     text-align: center;
     position: relative;
     z-index: 1;
     width: 90%;
-  }
-  h1 {
+}
+h1 {
     color: #ff3366;
     margin-bottom: 40px;
     font-size: 1.5em;
     position: relative;
     z-index: 1;
-  }
-  button {
+}
+button {
     font-size: 16px;
     padding: 12px 25px;
     margin: 10px;
@@ -38,40 +38,55 @@
     cursor: pointer;
     transition: transform 0.2s ease;
     position: relative;
-  }
-  #yes {
+}
+#yes {
     background-color: #ff6699;
     color: white;
-    z-index: 2; /* Yes button above No */
-  }
-  #no {
+    z-index: 2;
+}
+#no {
     background-color: #cccccc;
-    z-index: 1; /* No button below Yes for overlap */
-  }
-  .heart {
+    z-index: 1;
+}
+.popMessage {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #fff3f3;
+    border: 2px solid #ff6699;
+    border-radius: 15px;
+    padding: 15px 20px;
+    font-size: 1.2em;
+    color: #ff3366;
+    text-align: center;
+    z-index: 10;
+    opacity: 0;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+.heart {
     position: absolute;
     color: #ff3366;
     font-size: 20px;
     animation: float 3s linear forwards;
     z-index: 0;
-  }
-  @keyframes float {
+}
+@keyframes float {
     0% { transform: translateY(0) rotate(0deg); opacity:1; }
     100% { transform: translateY(-100vh) rotate(360deg); opacity:0; }
-  }
-
-  @media (min-width: 600px) {
+}
+@media (min-width: 600px) {
     h1 { font-size: 2em; }
     button { font-size: 18px; padding: 15px 30px; }
-  }
+}
 </style>
 </head>
 <body>
 
 <div id="container">
-  <h1>Baby Harrieth Nicole 💖, will you be my Valentine?</h1>
-  <button id="yes">Yes 😍</button>
-  <button id="no">No 😅</button>
+    <h1>Hello my baby harrieth, will you be my Valentine?😘</h1>
+    <button id="yes">Yes 🥰</button>
+    <button id="no">No 😒</button>
 </div>
 
 <script>
@@ -79,17 +94,24 @@ const yesButton = document.getElementById('yes');
 const noButton = document.getElementById('no');
 const container = document.getElementById('container');
 
-let yesScale = 1;       // initial scale
+let yesScale = 1;
 let noClicks = 0;
-let growthPerTap = 0.5; // small growth for taps 1-4
+let growthPerTap = 0.5;
 
-// Function to calculate dynamic scale to cover entire screen
+// Placeholder pop-up messages (replace with your actual messages)
+const messages = [
+    "Ahy?! Tinatanggihan ako??😒🤨", // first No tap
+    "Weh, sigurado na ba yan?😝", // second No tap
+    "Yes kana kaya bebeko🥹", // third No tap
+    "Ahy, ayaw na talga sa Dih ko oh😏", // fourth No tap
+    "ok.👍"  // fifth No tap
+];
+
 function getMaxScale() {
     const screenWidth = window.innerWidth;
     const screenHeight = window.innerHeight;
     const yesRect = yesButton.getBoundingClientRect();
-    // Scale required to cover both width and height
-    const scaleX = screenWidth / yesRect.width * 1.5; // extra 50% buffer
+    const scaleX = screenWidth / yesRect.width * 1.5;
     const scaleY = screenHeight / yesRect.height * 1.5;
     return Math.max(scaleX, scaleY);
 }
@@ -109,32 +131,50 @@ function wiggleNo() {
     noButton.style.transform = `rotate(${angle}deg)`;
 }
 
-// On No click
+function showPopMessage(text) {
+    const pop = document.createElement('div');
+    pop.className = 'popMessage';
+    pop.innerText = text;
+    container.appendChild(pop);
+    setTimeout(() => {
+        pop.style.opacity = 1;
+        pop.style.transform = 'translate(-50%, -50%) scale(1.1)';
+    }, 50);
+    setTimeout(() => {
+        pop.style.opacity = 0;
+        pop.style.transform = 'translate(-50%, -50%) scale(0.9)';
+        setTimeout(() => pop.remove(), 300);
+    }, 1200);
+}
+
+// No button behavior
 noButton.addEventListener('click', () => {
+    if(noClicks < 5){
+        showPopMessage(messages[noClicks]);
+    }
+
     noClicks++;
 
     if(noClicks < 5){
-        // Slightly grow Yes button for taps 1-4
         yesScale += growthPerTap;
         yesButton.style.transform = `scale(${yesScale})`;
         if(noClicks > 1) wiggleNo();
     } else if(noClicks === 5){
-        // On 5th tap: Zoom Yes button to cover entire screen dynamically
         const maxScale = getMaxScale();
         yesButton.style.transition = 'transform 0.6s ease-in-out';
         yesButton.style.transform = `scale(${maxScale})`;
     }
 
-    // Hearts for fun
     for(let i=0; i<5; i++) createHeart();
 });
 
-// When Yes is clicked
+// Yes button behavior
 yesButton.addEventListener('click', () => {
     document.body.innerHTML = `
         <div style="display:flex; justify-content:center; align-items:center; flex-direction:column; height:100vh; background:#ffcccc;">
-            <h1 style="font-size:4em; color:#ff3366; text-align:center;">💖 I LOVE YOU 💖</h1>
-            <h2 style="color:#ff3366; font-size:1.8em; text-align:center;">I love you Baby, paisa ako ha? 😘</h2>
+		    <h1 style="font-size:5em; color:#ff3366; text-align:center;">Rupok ha😝</h1>
+            <h1 style="font-size:5em; color:#ff3366; text-align:center;">Yieeut! Iloveyou baby ko!!!😘</h1>
+            <h2 style="color:#ff3366; font-size:2em; text-align:center;">Paisa ako ha?👉👌🥵😝</h2>
         </div>
     `;
     setInterval(() => {
@@ -148,7 +188,7 @@ yesButton.addEventListener('click', () => {
     }, 200);
 });
 
-// Optional: recalc max scale on window resize
+// Adjust Yes scale on resize
 window.addEventListener('resize', () => {
     if(noClicks >= 5){
         const maxScale = getMaxScale();
