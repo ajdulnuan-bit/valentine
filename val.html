@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Valentine for Baby Harrieth Nicole 💖</title>
+<style>
+  body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background: #ffe6e6;
+    font-family: 'Arial', sans-serif;
+    overflow: hidden;
+    position: relative;
+  }
+  #container {
+    text-align: center;
+    position: relative;
+    z-index: 1;
+    width: 90%;
+  }
+  h1 {
+    color: #ff3366;
+    margin-bottom: 40px;
+    font-size: 1.5em;
+    position: relative;
+    z-index: 1;
+  }
+  button {
+    font-size: 16px;
+    padding: 12px 25px;
+    margin: 10px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+    position: relative;
+  }
+  #yes {
+    background-color: #ff6699;
+    color: white;
+    z-index: 2; /* Yes button above No */
+  }
+  #no {
+    background-color: #cccccc;
+    z-index: 1; /* No button below Yes for overlap */
+  }
+  .heart {
+    position: absolute;
+    color: #ff3366;
+    font-size: 20px;
+    animation: float 3s linear forwards;
+    z-index: 0;
+  }
+  @keyframes float {
+    0% { transform: translateY(0) rotate(0deg); opacity:1; }
+    100% { transform: translateY(-100vh) rotate(360deg); opacity:0; }
+  }
+
+  @media (min-width: 600px) {
+    h1 { font-size: 2em; }
+    button { font-size: 18px; padding: 15px 30px; }
+  }
+</style>
+</head>
+<body>
+
+<div id="container">
+  <h1>Baby Harrieth Nicole 💖, will you be my Valentine?</h1>
+  <button id="yes">Yes 😍</button>
+  <button id="no">No 😅</button>
+</div>
+
+<script>
+const yesButton = document.getElementById('yes');
+const noButton = document.getElementById('no');
+const container = document.getElementById('container');
+
+let yesScale = 1;       // initial scale
+let noClicks = 0;
+let growthPerTap = 0.5; // small growth for taps 1-4
+
+// Function to calculate dynamic scale to cover entire screen
+function getMaxScale() {
+    const screenWidth = window.innerWidth;
+    const screenHeight = window.innerHeight;
+    const yesRect = yesButton.getBoundingClientRect();
+    // Scale required to cover both width and height
+    const scaleX = screenWidth / yesRect.width * 1.5; // extra 50% buffer
+    const scaleY = screenHeight / yesRect.height * 1.5;
+    return Math.max(scaleX, scaleY);
+}
+
+function createHeart() {
+    const heart = document.createElement('div');
+    heart.className = 'heart';
+    heart.innerText = '💖';
+    heart.style.left = Math.random() * window.innerWidth + 'px';
+    heart.style.fontSize = (16 + Math.random() * 20) + 'px';
+    document.body.appendChild(heart);
+    setTimeout(() => heart.remove(), 3000);
+}
+
+function wiggleNo() {
+    const angle = (Math.random() * 20) - 10;
+    noButton.style.transform = `rotate(${angle}deg)`;
+}
+
+// On No click
+noButton.addEventListener('click', () => {
+    noClicks++;
+
+    if(noClicks < 5){
+        // Slightly grow Yes button for taps 1-4
+        yesScale += growthPerTap;
+        yesButton.style.transform = `scale(${yesScale})`;
+        if(noClicks > 1) wiggleNo();
+    } else if(noClicks === 5){
+        // On 5th tap: Zoom Yes button to cover entire screen dynamically
+        const maxScale = getMaxScale();
+        yesButton.style.transition = 'transform 0.6s ease-in-out';
+        yesButton.style.transform = `scale(${maxScale})`;
+    }
+
+    // Hearts for fun
+    for(let i=0; i<5; i++) createHeart();
+});
+
+// When Yes is clicked
+yesButton.addEventListener('click', () => {
+    document.body.innerHTML = `
+        <div style="display:flex; justify-content:center; align-items:center; flex-direction:column; height:100vh; background:#ffcccc;">
+            <h1 style="font-size:4em; color:#ff3366; text-align:center;">💖 I LOVE YOU 💖</h1>
+            <h2 style="color:#ff3366; font-size:1.8em; text-align:center;">I love you Baby, paisa ako ha? 😘</h2>
+        </div>
+    `;
+    setInterval(() => {
+        const heart = document.createElement('div');
+        heart.className = 'heart';
+        heart.innerText = '💖';
+        heart.style.left = Math.random() * window.innerWidth + 'px';
+        heart.style.fontSize = (16 + Math.random() * 20) + 'px';
+        document.body.appendChild(heart);
+        setTimeout(() => heart.remove(), 3000);
+    }, 200);
+});
+
+// Optional: recalc max scale on window resize
+window.addEventListener('resize', () => {
+    if(noClicks >= 5){
+        const maxScale = getMaxScale();
+        yesButton.style.transform = `scale(${maxScale})`;
+    }
+});
+</script>
+
+</body>
+</html>
